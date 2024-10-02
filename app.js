@@ -10,7 +10,9 @@ app.use(express.static('public'))
 const router = express.Router()
 
 router.get('/', (req,res,next) => {
-    res.render('lock')
+    res.render('lock', {
+        title: 'Main Page'
+    })
 })
 
 app.use(router)
