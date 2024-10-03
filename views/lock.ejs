@@ -1,6 +1,17 @@
 <%- include('./includes/head.ejs') %>
+<link rel="stylesheet" href="/css/lock.css">
 </head>
 <body>
-    
+    <div id="lock-div">
+        <img id="lock-img" src="">
+        <h1 id="maintitle">Good to see you again</h1>
+        <p id="subtitle">Login Here</p>
+
+        <form method="POST" action="/login">
+            <input type="password" placeholder="Enter the password here" id="lock-input" name="input">
+            <button type="submit" id="login-button">Login</button>
+        </form>
+        <p id="subtitle"><%= errormessage %></p>
+    </div>
 </body>
 </html>

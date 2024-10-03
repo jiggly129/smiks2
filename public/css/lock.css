@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&display=swap');
+
+#lock-div {
+    left: 50%;
+    width: 40vw;
+    height: 50vh;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0.5vw solid black;
+    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#maintitle {
+    font-family: "Afacad Flux", sans-serif;
+}
+
+#subtitle {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#login-button {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
