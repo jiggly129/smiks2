@@ -17,6 +17,7 @@ app.use(bodyparser.json())
 const router = express.Router()
 
 let loggedIn = false
+let loggedInTimes = 0
 let errormessageVar = ''
 
 router.get('/', (req,res,next) => {
@@ -28,10 +29,20 @@ router.get('/', (req,res,next) => {
 
 router.get('/homepage', (req,res,next) => {
     if (loggedIn === true) {
-        res.render('homepage', {
+        loggedInTimes += 1
+
+        if (loggedInTimes === 5) {
+            loggedIn = false
+            loggedInTimes = 0
+        }
+        
+        return res.render('homepage', {
             title: "Homepage"
         })
-    }
+    } 
+    
+    errormessageVar = 'Please login first'
+    res.redirect('/')
 })
 
 router.post('/login', (req,res,next) => {
@@ -41,12 +52,12 @@ router.post('/login', (req,res,next) => {
 
      if (input != 'mathy') {
         errormessageVar = 'Please enter the correct password'
-        res.redirect('/')
-    } else {
-        loggedIn = true
-        errormessageVar = ''
-        res.redirect('/homepage')
+        return res.redirect('/')
     }
+
+    loggedIn = true
+    errormessageVar = ''
+    res.redirect('/homepage')
 })
 
 app.use(router)
