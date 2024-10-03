@@ -31,9 +31,11 @@ router.get('/homepage', (req,res,next) => {
     if (loggedIn === true) {
         loggedInTimes += 1
 
-        if (loggedInTimes === 5) {
+        if (loggedInTimes === 10) {
             loggedIn = false
             loggedInTimes = 0
+            errormessageVar = 'Login expired; please login again'
+            return res.redirect('/')
         }
         
         return res.render('homepage', {
@@ -62,6 +64,6 @@ router.post('/login', (req,res,next) => {
 
 app.use(router)
 
-app.listen(3000)
+app.listen(10000)
 
 module.exports = router
