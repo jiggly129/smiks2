@@ -1,5 +1,5 @@
 const path = require('path')
-const URLSearchParams = require('url')
+const fs = require('fs')
 
 const express = require('express')
 const bodyparser = require('body-parser')
@@ -19,6 +19,11 @@ const router = express.Router()
 let loggedIn = false
 let loggedInTimes = 0
 let errormessageVar = ''
+
+const redirectLogin = (req,res,next) => {
+    errormessageVar = 'Please login first'
+    res.redirect('/')
+}
 
 router.get('/', (req,res,next) => {
     res.render('lock', {
@@ -43,8 +48,27 @@ router.get('/homepage', (req,res,next) => {
         })
     } 
     
-    errormessageVar = 'Please login first'
-    res.redirect('/')
+    redirectLogin(req,res,next)
+})
+
+router.get('/chess', (req,res,next) => {
+    if (loggedIn === true) {
+        return res.render('chess', {
+            title: 'Chess'
+        })
+    }
+
+    redirectLogin(req,res,next)
+})
+
+router.get('/gym', (req,res,next) => {
+    if (loggedIn === true) {
+        return res.render('gym', {
+            title: 'Workout Schedule'
+        })
+    }
+
+    redirectLogin(req,res,next)
 })
 
 router.post('/login', (req,res,next) => {
@@ -60,6 +84,13 @@ router.post('/login', (req,res,next) => {
     loggedIn = true
     errormessageVar = ''
     res.redirect('/homepage')
+})
+
+//404
+
+router.get('/*', (req,res,next) => {
+    res.redirect('/')
+    errormessageVar = 'Page not found: 404'
 })
 
 app.use(router)

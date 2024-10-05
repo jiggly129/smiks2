@@ -11,6 +11,7 @@ body {
     align-items: center;
     background: rgb(187, 183, 183);
     height: 5vh;
+    gap: 3%;
 }
 
 #navbar > a {
@@ -19,4 +20,18 @@ body {
     font-size: 2em;
     cursor: pointer;
     font-family: "Montserrat", sans-serif;
+}
+
+#title {
+    text-align: center;
+    font-family: "Montserrat", sans-serif;;
+    font-size: 2em;
+}
+
+#maintitle {
+    font-family: "Afacad Flux", sans-serif;
+}
+
+#subtitle {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }

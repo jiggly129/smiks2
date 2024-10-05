@@ -1,0 +1,35 @@
+<%- include('./includes/head.ejs') %>
+<link rel="stylesheet" href="/css/gym.css">
+</head>
+<body>
+    <%- include('./includes/nav.ejs') %>
+
+    <h1 id="title">Enter and save your workout schedule</h1>
+     
+    <form id="add-form" action="/addgym" method="post">
+        <div class="form-subdiv">
+            <p id="subtitle">What's targeted in the workout</p>
+            <input name="bodypart" placeholder="" type="text" class="add-input">
+        </div>
+        <div class="form-subdiv">
+            <p id="subtitle">On what day will you do it</p>
+            <button id="dropdown-date" type="reset">Day of the week</button>
+            <div id="date-menu">
+                <button id="monday" class="date-button">Monday</button>
+                <button id="tuesday" class="date-button">Tuesday</button>
+                <button id="wednesday" class="date-button">Wednesday</button>
+                <button id="thursday" class="date-button">Thursday</button>
+                <button id="friday" class="date-button">Friday</button>
+                <button id="saturday" class="date-button">Saturday</button>
+                <button id="sunday" class="date-button">Sunday</button>
+            </div>
+        </div>
+        <div class="form-subdiv">
+            <p id="subtitle">Enter the url of the workout</p>
+            <input name="bodypart" placeholder="" type="text" class="add-input">
+        </div>
+    </form>
+
+    <script src="/js/gym.js"></script>
+</body>
+</html>
