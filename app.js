@@ -3,6 +3,8 @@ const fs = require('fs')
 
 const express = require('express')
 const bodyparser = require('body-parser')
+const axios = require('axios')
+const { get } = require('https')
 
 const app = express()
 
@@ -26,6 +28,9 @@ const redirectLogin = (req,res,next) => {
 }
 
 router.get('/', (req,res,next) => {
+    if (loggedIn === true) {
+        return res.redirect('/homepage')
+    }
     res.render('lock', {
         title: 'Main Page',
         errormessage: errormessageVar
@@ -61,10 +66,10 @@ router.get('/chess', (req,res,next) => {
     redirectLogin(req,res,next)
 })
 
-router.get('/gym', (req,res,next) => {
+router.get('/crypto', async (req,res,next) => {
     if (loggedIn === true) {
-        return res.render('gym', {
-            title: 'Workout Schedule'
+        return res.render('crypto', {
+            title: 'Crypto Prices'
         })
     }
 

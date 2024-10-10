@@ -5,7 +5,6 @@ let rowArray = Object.entries(document.getElementsByClassName('row'))
 
 const colorSquares = (rowL, even) => {
     let num
-
     if (even === true) {
         num = 0
     } else {
@@ -55,34 +54,6 @@ startButton.onclick = () => {
     let turn = 'light'
     started = true
 
-    //sort pieces
-
-    const chessPieces = Object.entries(document.getElementsByClassName('chess-piece'));
-    const lightPieces = [[{"cat": "bishop"}, []], [{"cat":"knight"}, []], [{"cat":"queen"}, []], [{"cat":"king"},[]], [{"cat":"rook"}, []], [{"cat":"pawn"}, []]];
-    const darkPieces = [[{"cat": "bishop"}, []], [{"cat":"knight"}, []], [{"cat":"queen"}, []], [{"cat":"king"},[]], [{"cat":"rook"}, []], [{"cat":"pawn"}, []]];
-
-    const sortPieces = (piece,color, type) => {
-        let array
-        if (color == 'light') {
-            array = lightPieces
-        } else {
-            array = darkPieces
-        }
-
-        array.forEach((div) => {
-            if (div[0].cat == type) {
-                div[1].push(piece)
-            }
-        })
-    }
-
-    chessPieces.forEach((piece) => {
-        if (piece[1].getAttribute('id').split('-')[0] == 'light') {
-            return sortPieces(piece[1],'light', piece[1].getAttribute('id').split('-')[1])
-        }
-        sortPieces(piece[1],'dark', piece[1].getAttribute('id').split('-')[1])
-    })
-
     //selected square
     
     let selectedSquare
@@ -112,16 +83,23 @@ startButton.onclick = () => {
                             let moveSquare = document.getElementById(`${moveSquareId}`)
                             
                             if (capture === true) {
+                                if (currentSquare.children[0].getAttribute('id').split('-')[0] == moveSquare.children[0].getAttribute('id').split('-')[0]) {
+                                    return ''
+                                }
                                 moveSquare.children[0].remove()
-                                moveSquare.appendChild(currentSquare.children[0])
-                                return currentSquare.children[0].remove()
+                                return moveSquare.appendChild(currentSquare.children[0])
                             }
 
                             moveSquare.appendChild(currentSquare.children[0])
-                            currentSquare.children[0].remove()
                         }
 
                         const checkSquares = (type) => {
+                            let i1 = letters.indexOf(l1)
+                            let i2 = letters.indexOf(l2)
+                                    
+                            let letterMove = parseInt(i2) - parseInt(i1)
+                            let numberMove = n2 - n1
+
                               if (type == 'knight') {
                                    const knight = (numL, numN, lAdd, nAdd) => {
                                         letters.forEach((l) => {
@@ -182,22 +160,32 @@ startButton.onclick = () => {
                                    knight(2, 1, false, true)
                               } else if (type == 'bishop') {
                                  const bishop = () => {
-                                    let i1 = letters.indexOf(l1)
-                                    let i2 = letters.indexOf(l2)
-                                    
-                                    let letterMove = parseInt(i2) - parseInt(i1)
-                                    let numberMove = n2 - n1
-
                                     if (Math.abs(letterMove) == Math.abs(numberMove)) {  
-                                        let selectedSquare = document.getElementById(`${l2}${n2}`)
-                                        console.log(selectedSquare)
-
                                         const checkSquares = (add, direction) => {
                                             let iL = letters.indexOf(l1)
+                                            let first =  true
+
+                                            const check = (i, n2) => {
+                                                if (i == n2) {
+                                                    if (document.getElementById(`${letters[iL]}${i}`).children[0] !== undefined) {
+                                                        return move(currentId, selectedId, true)
+                                                    }
+
+                                                    move(currentId, selectedId, false)
+                                                }
+                                            }
 
                                             if (add === true) {
                                                 for (let i = n1; i <= n2; i++) {
-                                                    console.log(document.getElementById(`${letters[iL]}${i}`))
+                                                    if (first === false) {
+                                                        if (document.getElementById(`${letters[iL]}${i}`).children[0] != undefined && i != n2) {
+                                                            break
+                                                        }
+                                                    }
+                                                    check(i,n2)
+
+                                                    first = false 
+
                                                     if (direction == 'left') {
                                                         iL--                                                
                                                     } else {
@@ -206,7 +194,15 @@ startButton.onclick = () => {
                                                 }
                                             } else {
                                                 for (let i = n1; i >= n2; i--) {
-                                                    console.log(document.getElementById(`${letters[iL]}${i}`))
+                                                    if (first === false) {
+                                                        if (document.getElementById(`${letters[iL]}${i}`).children[0] != undefined && i != n2) {
+                                                            break
+                                                        }
+                                                    }
+                                                    check(i,n2)
+
+                                                    first = false
+
                                                     if (direction == 'left') {
                                                         iL--                                                
                                                     } else {
@@ -214,7 +210,6 @@ startButton.onclick = () => {
                                                     }
                                                 }
                                             }
-                                            
                                         }
                                         
                                         if (n2 > n1 && letters.indexOf(l1) > letters.indexOf(l2)) {
@@ -229,7 +224,85 @@ startButton.onclick = () => {
                                     }
                               }
                               bishop()
-                        }}
+                        } else if (type == 'rook') {
+                            const rook = () => {
+                                    let iL = letters.indexOf(l1)
+                                    let first =  true  
+
+                                    const check = (i, type) => {
+                                        if (type == 'number') {
+                                            if (i == n2) {
+                                                if (document.getElementById(`${l2}${i}`).children[0] !== undefined) {
+                                                    return move(currentId, selectedId, true)
+                                                }
+    
+                                                move(currentId, selectedId, false)
+                                            }
+                                        } else {
+                                            if (i == letters.indexOf(l2)) {
+                                                if (document.getElementById(`${l2}${n2}`).children[0] !== undefined) {
+                                                    return move(currentId, selectedId, true)
+                                                }
+    
+                                                move(currentId, selectedId, false)
+                                            } 
+                                        }
+                                    }
+
+
+                                    const checkMid = (i, direction) => {
+                                        if (first === false) {
+                                            if (direction == 'horizontal') {
+                                                if (document.getElementById(`${letters[i]}${n2}`).children[0] != undefined && i != letters.indexOf(l2)) {
+                                                    console.log(document.getElementById(`${letters[i]}${n2}`).children[0])
+                                                    return 'break'
+                                                }
+                                            } else {
+                                                if (document.getElementById(`${l2}${letters[i]}`).children[0] != undefined && i != n2) {
+                                                    console.log(document.getElementById(`${letters[l2]}${i}`).children[0])
+                                                    return 'break'
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (i1 == i2 && n2 > n1) {
+                                        for (let i = n1; i <= n2; i++) {
+                                            if (checkMid(i,'vertical') == 'break') {
+                                                break
+                                            }
+                                            check(i, 'number')
+                                            first = false
+                                        }
+                                    } else if (i1 == i2 && n2 < n1) {
+                                        for (let i = n1; i >= n2; i--) {
+                                            if (checkMid(i,'vertical') == 'break') {
+                                                break
+                                            }
+                                            check(i, 'number')
+                                            first = false
+                                       }
+                                    } else if (i1 > i2 && n2 == n1) {
+                                        for (let i = iL; i >= letters.indexOf(l2); i--) {
+                                            if (checkMid(i,'horizontal') == 'break') {
+                                                break
+                                            }
+                                            check(i, 'letter')
+                                            first = false
+                                       }
+                                    } else if (i1 < i2 && n2 == n1) {
+                                        for (let i = iL; i <= letters.indexOf(l2); i++) {
+                                            if (checkMid(i,'horizontal') == 'break') {
+                                                break
+                                            }
+                                            check(i, 'letter')
+                                            first = false
+                                       }
+                                    }
+                            }
+                            rook()
+                        }
+                    }
 
                         checkSquares(type)
                     }
